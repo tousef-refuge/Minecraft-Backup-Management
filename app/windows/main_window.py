@@ -61,7 +61,14 @@ class MainWindow(QtWidgets.QWidget):
 
         prev_dir = self.settings.value("minecraft_dir", None, str)
         final_dir = str(prev_dir if prev_dir else default)
-        self.dir_select.setText(final_dir if self._is_valid_dir(final_dir) else "No directory selected.")
+        if self._is_valid_dir(final_dir):
+            self.dir_select.setText(final_dir)
+
+            #generate backups folder automatically since it doesnt exist normally
+            backups_dir = Path(final_dir) / "backups"
+            backups_dir.mkdir(parents=True, exist_ok=True)
+        else:
+            self.dir_select.setText("No directory selected.")
 
         dir_layout.addWidget(self.dir_select)
 
