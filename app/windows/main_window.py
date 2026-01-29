@@ -1,17 +1,21 @@
 from PySide6 import QtCore, QtGui, QtWidgets
 
+from pathlib import Path
+import os
+
 class MainWindow(QtWidgets.QWidget):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Minecraft Backup Management")
         self.settings = QtCore.QSettings()
 
-        self.main_layout = QtWidgets.QHBoxLayout(self)
+        self.main_layout = QtWidgets.QVBoxLayout(self)
         self.setLayout(self.main_layout)
         self.main_layout.setContentsMargins(20, 20, 20, 20)
         self.main_layout.setSpacing(10)
 
         self._build_title()
+        self._build_dir_select()
 
         self.adjustSize()
         self.setFixedSize(self.size())
@@ -34,3 +38,63 @@ class MainWindow(QtWidgets.QWidget):
         layout.addWidget(title)
 
         self.main_layout.addLayout(layout)
+
+    def _build_dir_select(self):
+        frame = QtWidgets.QFrame(frameShape=QtWidgets.QFrame.Shape.StyledPanel)
+        frame_layout = QtWidgets.QVBoxLayout(frame)
+
+        text = QtWidgets.QLabel("Minecraft directory")
+        frame_layout.addWidget(text)
+
+        dir_layout = QtWidgets.QHBoxLayout()
+
+        self.dir_select = QtWidgets.QLineEdit()
+        self.dir_select.setFixedWidth(300)
+        self.dir_select.setReadOnly(True)
+
+        #find the default value for the .minecraft
+        #directory if a directory hasnt been chosen already
+
+        roaming = Path(os.environ["APPDATA"])
+        default = roaming / ".minecraft"
+        default.mkdir(parents=True, exist_ok=True)
+
+        prev_dir = self.settings.value("minecraft_dir", None, str)
+        final_dir = str(prev_dir if prev_dir else default)
+        self.dir_select.setText(final_dir if self._is_valid_dir(final_dir) else "No directory selected.")
+
+        dir_layout.addWidget(self.dir_select)
+
+        browse_button = QtWidgets.QPushButton("Browse...")
+        browse_button.clicked.connect(self._on_browse)
+        dir_layout.addWidget(browse_button)
+
+        frame_layout.addLayout(dir_layout)
+        self.main_layout.addWidget(frame)
+
+    def _on_browse(self):
+        start_dir = self.dir_select.text()
+
+        folder = QtWidgets.QFileDialog.getExistingDirectory(
+            self,
+            "Select .minecraft Folder",
+            start_dir
+        )
+
+        #check for valid .minecraft folder
+        if folder:
+            if self._is_valid_dir(folder):
+                self.dir_select.setText(folder)
+                self.settings.setValue("minecraft_dir", folder)
+            else:
+                QtWidgets.QMessageBox.warning(
+                    self,
+                    "Error",
+                    "Invalid .minecraft folder."
+                )
+
+    @staticmethod
+    def _is_valid_dir(folder):
+        needed_subdirs = ["assets", "versions", "libraries", "saves"]
+        return (os.path.basename(folder) == ".minecraft" and
+                    all(os.path.isdir(os.path.join(folder, subdir)) for subdir in needed_subdirs))
