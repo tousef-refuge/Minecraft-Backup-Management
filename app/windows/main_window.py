@@ -1,5 +1,7 @@
 from PySide6 import QtCore, QtGui, QtWidgets
 
+from .auto_extract_dialog import AutoExtractDialog
+
 from pathlib import Path
 import os
 
@@ -16,10 +18,12 @@ class MainWindow(QtWidgets.QWidget):
 
         self._build_title()
         self._build_dir_select()
+        self._build_buttons()
 
         self.adjustSize()
         self.setFixedSize(self.size())
 
+    #window builders
     def _build_title(self):
         layout = QtWidgets.QHBoxLayout()
         layout.setSpacing(10)
@@ -79,6 +83,16 @@ class MainWindow(QtWidgets.QWidget):
         frame_layout.addLayout(dir_layout)
         self.main_layout.addWidget(frame)
 
+    def _build_buttons(self):
+        layout = QtWidgets.QHBoxLayout()
+
+        auto_extract = QtWidgets.QPushButton("Set up backup auto-extract")
+        auto_extract.clicked.connect(self._on_auto_extract)
+        layout.addWidget(auto_extract)
+
+        self.main_layout.addLayout(layout)
+
+    #button binds
     def _on_browse(self):
         start_dir = self.dir_select.text()
 
@@ -100,6 +114,11 @@ class MainWindow(QtWidgets.QWidget):
                     "Invalid .minecraft folder."
                 )
 
+    def _on_auto_extract(self):
+        auto_extract_dialog = AutoExtractDialog()
+        auto_extract_dialog.exec()
+
+    #uh
     @staticmethod
     def _is_valid_dir(folder):
         needed_subdirs = ["assets", "versions", "libraries", "saves"]
