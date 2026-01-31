@@ -1,5 +1,7 @@
 from PySide6 import QtCore, QtGui, QtWidgets
 
+from app.logic import is_valid_mc_dir
+
 from .auto_extract_dialog import AutoExtractDialog
 
 from pathlib import Path
@@ -117,9 +119,3 @@ class MainWindow(QtWidgets.QWidget):
     def _on_auto_extract(self):
         auto_extract_dialog = AutoExtractDialog()
         auto_extract_dialog.exec()
-
-
-def is_valid_mc_dir(folder):
-    needed_subdirs = ["assets", "versions", "libraries", "saves"]
-    return (os.path.basename(folder) == ".minecraft" and
-                all(os.path.isdir(os.path.join(folder, subdir)) for subdir in needed_subdirs))
