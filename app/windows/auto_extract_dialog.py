@@ -11,5 +11,32 @@ class AutoExtractDialog(QtWidgets.QDialog):
         self.main_layout.setContentsMargins(20, 20, 20, 20)
         self.main_layout.setSpacing(10)
 
+        self._build_options()
+        self._build_run_button()
+
         self.adjustSize()
         self.setFixedSize(self.size())
+
+    def _build_options(self):
+        frame = QtWidgets.QFrame(frameShape=QtWidgets.QFrame.Shape.StyledPanel)
+        frame_layout = QtWidgets.QFormLayout(frame)
+        frame_layout.setSpacing(4)
+
+        self.world_name = QtWidgets.QLineEdit()
+        frame_layout.addRow("World Name:", self.world_name)
+
+        self.track_numbers = QtWidgets.QCheckBox()
+        frame_layout.addRow("Track World Numbers:", self.track_numbers)
+
+        self.scan_save = QtWidgets.QCheckBox()
+        frame_layout.addRow("Scan Save Folder:", self.scan_save)
+
+        self.main_layout.addWidget(frame)
+
+    def _build_run_button(self):
+        self.run_button = QtWidgets.QPushButton("Run")
+        self.run_button.clicked.connect(self._on_run)
+        self.main_layout.addWidget(self.run_button)
+
+    def _on_run(self):
+        pass
