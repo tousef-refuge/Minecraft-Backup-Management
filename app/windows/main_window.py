@@ -69,12 +69,14 @@ class MainWindow(QtWidgets.QWidget):
         final_dir = str(prev_dir if prev_dir else default)
         if is_valid_mc_dir(final_dir):
             self.dir_select.setText(final_dir)
+            self.settings.setValue("minecraft_dir", self.dir_select.text())
 
             #generate backups folder automatically since it doesnt exist normally
             backups_dir = Path(final_dir) / "backups"
             backups_dir.mkdir(parents=True, exist_ok=True)
         else:
             self.dir_select.setText("No directory selected.")
+            self.settings.setValue("minecraft_dir", None)
 
         dir_layout.addWidget(self.dir_select)
 
@@ -117,5 +119,12 @@ class MainWindow(QtWidgets.QWidget):
                 )
 
     def _on_auto_extract(self):
-        auto_extract_dialog = AutoExtractDialog()
-        auto_extract_dialog.exec()
+        if self.settings.value("minecraft_dir"):
+            auto_extract_dialog = AutoExtractDialog()
+            auto_extract_dialog.exec()
+        else:
+            QtWidgets.QMessageBox.warning(
+                self,
+                "Error",
+                "Invalid .minecraft folder."
+            )

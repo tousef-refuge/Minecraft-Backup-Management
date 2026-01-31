@@ -1,5 +1,10 @@
 from PySide6 import QtCore, QtWidgets
 
+from app.logic import find_zip
+from .auto_extract_confirm import AutoExtractConfirm
+
+from pathlib import Path
+
 class AutoExtractDialog(QtWidgets.QDialog):
     def __init__(self):
         super().__init__()
@@ -45,7 +50,20 @@ class AutoExtractDialog(QtWidgets.QDialog):
         self.main_layout.addWidget(self.run_button)
 
     def _on_run(self):
-        pass
+        world_name = self.world_name.text().strip()
+        zip_path = find_zip(Path(f"{self.settings.value('minecraft_dir')}/backups"), world_name)
+        if self.scan_save.isChecked():
+            zip_path = zip_path or find_zip(Path(f"{self.settings.value('minecraft_dir')}/saves"), world_name)
+
+        if zip_path:
+            auto_extract_confirm = AutoExtractConfirm(zip_path, self.track_numbers.isChecked())
+            auto_extract_confirm.exec()
+        else:
+            QtWidgets.QMessageBox.warning(
+                self,
+                "Error",
+                "No backup with this world name has been found.\nKeep in mind the name of the folder inside the backup\nis checked, not the zip itself."
+            )
 
 def info_layout(widget, text):
     sublayout = QtWidgets.QHBoxLayout()
