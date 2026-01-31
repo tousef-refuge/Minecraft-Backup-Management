@@ -65,7 +65,7 @@ class MainWindow(QtWidgets.QWidget):
 
         prev_dir = self.settings.value("minecraft_dir", None, str)
         final_dir = str(prev_dir if prev_dir else default)
-        if self._is_valid_dir(final_dir):
+        if is_valid_mc_dir(final_dir):
             self.dir_select.setText(final_dir)
 
             #generate backups folder automatically since it doesnt exist normally
@@ -104,7 +104,7 @@ class MainWindow(QtWidgets.QWidget):
 
         #check for valid .minecraft folder
         if folder:
-            if self._is_valid_dir(folder):
+            if is_valid_mc_dir(folder):
                 self.dir_select.setText(folder)
                 self.settings.setValue("minecraft_dir", folder)
             else:
@@ -118,9 +118,8 @@ class MainWindow(QtWidgets.QWidget):
         auto_extract_dialog = AutoExtractDialog()
         auto_extract_dialog.exec()
 
-    #uh
-    @staticmethod
-    def _is_valid_dir(folder):
-        needed_subdirs = ["assets", "versions", "libraries", "saves"]
-        return (os.path.basename(folder) == ".minecraft" and
-                    all(os.path.isdir(os.path.join(folder, subdir)) for subdir in needed_subdirs))
+
+def is_valid_mc_dir(folder):
+    needed_subdirs = ["assets", "versions", "libraries", "saves"]
+    return (os.path.basename(folder) == ".minecraft" and
+                all(os.path.isdir(os.path.join(folder, subdir)) for subdir in needed_subdirs))
