@@ -26,10 +26,16 @@ class AutoExtractDialog(QtWidgets.QDialog):
         frame_layout.addRow("World Name:", self.world_name)
 
         self.track_numbers = QtWidgets.QCheckBox()
-        frame_layout.addRow("Track World Numbers:", self.track_numbers)
+        frame_layout.addRow(
+            "Track World Numbers:",
+            info_layout(self.track_numbers, "Extracted worlds will be called <name>#<num> where\n<num> is increased by 1 everytime the world is restored")
+        )
 
         self.scan_save = QtWidgets.QCheckBox()
-        frame_layout.addRow("Scan Save Folder:", self.scan_save)
+        frame_layout.addRow(
+            "Scan Save Folder:",
+            info_layout(self.scan_save, "On top of the backups/ folder, the saves/ folder will\nadditionally be scanned")
+        )
 
         self.main_layout.addWidget(frame)
 
@@ -40,3 +46,11 @@ class AutoExtractDialog(QtWidgets.QDialog):
 
     def _on_run(self):
         pass
+
+def info_layout(widget, text):
+    sublayout = QtWidgets.QHBoxLayout()
+    info = QtWidgets.QLabel('ⓘ')
+    info.setToolTip(text)
+    sublayout.addWidget(widget, alignment=QtCore.Qt.AlignmentFlag.AlignRight)
+    sublayout.addWidget(info, alignment=QtCore.Qt.AlignmentFlag.AlignLeft)
+    return sublayout
