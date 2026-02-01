@@ -51,9 +51,9 @@ class AutoExtractDialog(QtWidgets.QDialog):
 
     def _on_run(self):
         world_name = self.world_name.text().strip()
-        zip_path = find_zip(Path(f"{self.settings.value('minecraft_dir')}/backups"), world_name)
+        zip_path = find_zip(Path(self.settings.value("minecraft_dir")) / "backups", world_name)
         if self.scan_save.isChecked():
-            zip_path = zip_path or find_zip(Path(f"{self.settings.value('minecraft_dir')}/saves"), world_name)
+            zip_path = zip_path or find_zip(Path(self.settings.value("minecraft_dir")) / "saves", world_name)
 
         if zip_path:
             auto_extract_confirm = AutoExtractConfirm(zip_path, self.track_numbers.isChecked())
