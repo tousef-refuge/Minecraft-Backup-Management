@@ -33,13 +33,13 @@ class AutoExtractDialog(QtWidgets.QDialog):
         self.track_numbers = QtWidgets.QCheckBox()
         frame_layout.addRow(
             "Track World Numbers:",
-            info_layout(self.track_numbers, "Extracted worlds will be called <name>#<num> where\n<num> is increased by 1 everytime the world is restored")
+            info_layout(self.track_numbers, "Extracted worlds will be called <name>#<num> where\n<num> is increased by 1 everytime the world is restored\nThe world name you type above should NOT end\nwith #<num> otherwise the program won't detect it")
         )
 
         self.scan_save = QtWidgets.QCheckBox()
         frame_layout.addRow(
             "Scan Save Folder:",
-            info_layout(self.scan_save, "On top of the backups/ folder, the saves/ folder will\nadditionally be scanned")
+            info_layout(self.scan_save, "On top of the backups/ folder, the saves/ folder will\nadditionally be scanned\nThe program will use the first correct .zip file it detects\nstarting with backups/ and then moving to saves/")
         )
 
         self.main_layout.addWidget(frame)
