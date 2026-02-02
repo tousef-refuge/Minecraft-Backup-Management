@@ -17,7 +17,7 @@ class Dialog(QtWidgets.QDialog):
         self.main_layout.setSpacing(10)
 
         self._build_options()
-        self._build_run_button()
+        self._build_buttons()
 
         self.adjustSize()
         self.setFixedSize(self.size())
@@ -44,10 +44,19 @@ class Dialog(QtWidgets.QDialog):
 
         self.main_layout.addWidget(frame)
 
-    def _build_run_button(self):
+    def _build_buttons(self):
+        button_layout = QtWidgets.QVBoxLayout()
+        button_layout.setSpacing(4)
+
         self.run_button = QtWidgets.QPushButton("Run")
         self.run_button.clicked.connect(self._on_run)
-        self.main_layout.addWidget(self.run_button)
+        button_layout.addWidget(self.run_button)
+
+        self.config_button = QtWidgets.QPushButton("Configure")
+        self.config_button.clicked.connect(self._on_config)
+        button_layout.addWidget(self.config_button)
+
+        self.main_layout.addLayout(button_layout)
 
     def _on_run(self):
         world_name = self.world_name.text().strip()
@@ -67,6 +76,9 @@ class Dialog(QtWidgets.QDialog):
                 "Error",
                 "No backup with this world name has been found.\nKeep in mind the name of the folder inside the backup\nis checked, not the zip itself."
             )
+
+    def _on_config(self):
+        pass
 
 def info_layout(widget, text):
     sublayout = QtWidgets.QHBoxLayout()
