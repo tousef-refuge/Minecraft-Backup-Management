@@ -1,5 +1,5 @@
 import sys
-from app import Application
+from app.windows import MainWindow
 from PySide6 import QtWidgets, QtCore, QtGui
 
 def main():
@@ -8,8 +8,8 @@ def main():
     QtCore.QCoreApplication.setOrganizationDomain("MinecraftBackupManagement")
     app.setWindowIcon(QtGui.QIcon("textures/logo.svg"))
 
-    application = Application()
-    application.start()
+    main_window = MainWindow()
+    main_window.show()
     sys.exit(app.exec())
 
 if __name__ == "__main__":
