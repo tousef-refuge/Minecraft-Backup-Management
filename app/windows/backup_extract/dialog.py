@@ -1,11 +1,11 @@
 from PySide6 import QtCore, QtWidgets
 
 from app.logic import find_zip
-from .auto_extract_confirm import AutoExtractConfirm
+from app.windows.backup_extract.confirm import Confirm
 
 from pathlib import Path
 
-class AutoExtractDialog(QtWidgets.QDialog):
+class Dialog(QtWidgets.QDialog):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Backup Auto Extract")
@@ -59,8 +59,8 @@ class AutoExtractDialog(QtWidgets.QDialog):
                                             world_name, track_numbers)
 
         if zip_path:
-            auto_extract_confirm = AutoExtractConfirm(zip_path, track_numbers)
-            auto_extract_confirm.exec()
+            confirm = Confirm(zip_path, track_numbers)
+            confirm.exec()
         else:
             QtWidgets.QMessageBox.warning(
                 self,

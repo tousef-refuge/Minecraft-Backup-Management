@@ -1,11 +1,11 @@
 from PySide6 import QtCore, QtGui, QtWidgets
+from pathlib import Path
+import sys
+import os
+sys.path.append(str(Path(__file__).resolve().parent))
 
 from app.logic import is_valid_mc_dir
-
-from .auto_extract_dialog import AutoExtractDialog
-
-from pathlib import Path
-import os
+from backup_extract import Dialog as BackupExtractDialog
 
 class MainWindow(QtWidgets.QWidget):
     def __init__(self):
@@ -90,9 +90,9 @@ class MainWindow(QtWidgets.QWidget):
     def _build_buttons(self):
         layout = QtWidgets.QHBoxLayout()
 
-        auto_extract = QtWidgets.QPushButton("Set up backup auto-extract")
-        auto_extract.clicked.connect(self._on_auto_extract)
-        layout.addWidget(auto_extract)
+        backup_extract_button = QtWidgets.QPushButton("Set up backup auto-extract")
+        backup_extract_button.clicked.connect(self._on_backup_extract)
+        layout.addWidget(backup_extract_button)
 
         self.main_layout.addLayout(layout)
 
@@ -118,10 +118,10 @@ class MainWindow(QtWidgets.QWidget):
                     "Invalid .minecraft folder."
                 )
 
-    def _on_auto_extract(self):
+    def _on_backup_extract(self):
         if self.settings.value("minecraft_dir"):
-            auto_extract_dialog = AutoExtractDialog()
-            auto_extract_dialog.exec()
+            backup_extract_dialog = BackupExtractDialog()
+            backup_extract_dialog.exec()
         else:
             QtWidgets.QMessageBox.warning(
                 self,

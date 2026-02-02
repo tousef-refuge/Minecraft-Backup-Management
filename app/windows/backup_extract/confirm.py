@@ -4,7 +4,7 @@ from app.logic import ZipExtractor, get_top_level, get_end_num, remove_end_num
 
 from pathlib import Path
 
-class AutoExtractConfirm(QtWidgets.QDialog):
+class Confirm(QtWidgets.QDialog):
     def __init__(self, zip_path, track_numbers):
         super().__init__()
         self.settings = QtCore.QSettings()
