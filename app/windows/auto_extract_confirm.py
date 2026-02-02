@@ -36,16 +36,19 @@ class AutoExtractConfirm(QtWidgets.QDialog):
         save_dir = Path(self.settings.value("minecraft_dir")) / "saves"
 
         #prioritize current save first if it exists
-        self.start_num = get_end_num(next(
+        self.world_num = get_end_num(next(
             (p.name for p in save_dir.iterdir() if p.is_dir()
              and remove_end_num(p.name) == remove_end_num(world_name)),
             ''
         ))
         #if its zero we change that
-        if not self.start_num:
-            self.start_num = get_end_num(world_name)
+        if not self.world_num:
+            self.world_num = get_end_num(world_name)
 
-        print(self.start_num)
+        if not self.track_numbers:
+            self.world_num = 0
+        else:
+            self.world_num += 1 #increment by 1
 
     def _build_labels(self):
         info_label = QtWidgets.QLabel("The world will remain extracted for\nas long as this window is open.")
@@ -66,12 +69,15 @@ class AutoExtractConfirm(QtWidgets.QDialog):
         self.is_extracting = True
 
         self.thread = QtCore.QThread()
-        self.extractor = ZipExtractor(self.zip_path, self.track_numbers)
+        self.extractor = ZipExtractor(self.zip_path, self.world_num)
         self.extractor.moveToThread(self.thread)
 
         self.thread.started.connect(self.extractor.run)
         self.extractor.status.connect(self.status_label.setText)
         self.extractor.finished.connect(self.cleanup_extract)
+
+        if self.status_label.text() == "Extracting...":
+            self.world_num += 1
 
         self.thread.start()
 
