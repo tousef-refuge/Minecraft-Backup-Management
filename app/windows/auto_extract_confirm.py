@@ -1,10 +1,13 @@
 from PySide6 import QtCore, QtWidgets
 
-from app.logic import ZipExtractor
+from app.logic import ZipExtractor, get_top_level, get_end_num, remove_end_num
+
+from pathlib import Path
 
 class AutoExtractConfirm(QtWidgets.QDialog):
     def __init__(self, zip_path, track_numbers):
         super().__init__()
+        self.settings = QtCore.QSettings()
         self.zip_path = zip_path
         self.track_numbers = track_numbers
         self.setWindowTitle("Success")
@@ -27,6 +30,22 @@ class AutoExtractConfirm(QtWidgets.QDialog):
         self.thread = None
         self.extractor = None
         self.is_extracting = False
+
+        #number tracker logic thing
+        world_name ,= get_top_level(self.zip_path)
+        save_dir = Path(self.settings.value("minecraft_dir")) / "saves"
+
+        #prioritize current save first if it exists
+        self.start_num = get_end_num(next(
+            (p.name for p in save_dir.iterdir() if p.is_dir()
+             and remove_end_num(p.name) == remove_end_num(world_name)),
+            ''
+        ))
+        #if its zero we change that
+        if not self.start_num:
+            self.start_num = get_end_num(world_name)
+
+        print(self.start_num)
 
     def _build_labels(self):
         info_label = QtWidgets.QLabel("The world will remain extracted for\nas long as this window is open.")
