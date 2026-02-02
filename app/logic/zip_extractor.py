@@ -24,9 +24,8 @@ class ZipExtractor(QtCore.QObject):
             self.finished.emit()
             return
 
-        needs_extract = not self.extract_dir.exists()
         world_name ,= get_top_level(self.zip_path)
-        needs_extract |= not any(
+        needs_extract = not any(
             remove_end_num(p.name) == remove_end_num(world_name)
             for p in self.extract_dir.iterdir() if p.is_dir()
         )

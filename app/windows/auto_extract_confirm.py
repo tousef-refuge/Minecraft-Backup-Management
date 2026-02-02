@@ -73,11 +73,8 @@ class AutoExtractConfirm(QtWidgets.QDialog):
         self.extractor.moveToThread(self.thread)
 
         self.thread.started.connect(self.extractor.run)
-        self.extractor.status.connect(self.status_label.setText)
+        self.extractor.status.connect(self._status_connect)
         self.extractor.finished.connect(self.cleanup_extract)
-
-        if self.status_label.text() == "Extracting...":
-            self.world_num += 1
 
         self.thread.start()
 
@@ -89,6 +86,11 @@ class AutoExtractConfirm(QtWidgets.QDialog):
 
         self.extractor.deleteLater()
         self.thread.deleteLater()
+
+    def _status_connect(self, message):
+        self.status_label.setText(message)
+        if message == "Extracting...":
+            self.world_num += 1
 
     #camelcase jumpscare
     def closeEvent(self, event):
