@@ -8,8 +8,16 @@ def is_valid_mc_dir(folder):
     return (os.path.basename(folder) == ".minecraft" and
                 all(os.path.isdir(os.path.join(folder, subdir)) for subdir in needed_subdirs))
 
-def is_valid_world_folder(folder):
-    return True
+def is_valid_world_folder(zip_path, folder):
+    try:
+        with zipfile.ZipFile(zip_path, 'r') as zip_ref:
+            return any(
+                name == f"{folder}/level.dat"
+                for name in zip_ref.namelist()
+            )
+
+    except zipfile.BadZipFile:
+        return False
 
 def find_zip(zip_dir, world_name, track_numbers):
     for zip_path in zip_dir.glob("*.zip"):
@@ -18,7 +26,7 @@ def find_zip(zip_dir, world_name, track_numbers):
             if track_numbers:
                 world_dir = remove_end_num(world_dir)
 
-            if is_valid_world_folder(world_dir) and world_dir == world_name:
+            if is_valid_world_folder(zip_path, world_dir) and world_dir == world_name:
                 return zip_path
 
         except ValueError:
