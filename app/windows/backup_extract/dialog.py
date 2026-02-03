@@ -1,7 +1,8 @@
 from PySide6 import QtCore, QtWidgets
 
 from app.logic import find_zip
-from app.windows.backup_extract.confirm import Confirm
+from .status import StatusDialog
+from .config import ConfigDialog
 
 from pathlib import Path
 
@@ -68,8 +69,8 @@ class Dialog(QtWidgets.QDialog):
                                             world_name, track_numbers)
 
         if zip_path:
-            confirm = Confirm(zip_path, track_numbers)
-            confirm.exec()
+            status_dialog = StatusDialog(zip_path, track_numbers)
+            status_dialog.exec()
         else:
             QtWidgets.QMessageBox.warning(
                 self,
@@ -78,7 +79,8 @@ class Dialog(QtWidgets.QDialog):
             )
 
     def _on_config(self):
-        pass
+        config_dialog = ConfigDialog()
+        config_dialog.exec()
 
 def info_layout(widget, text):
     sublayout = QtWidgets.QHBoxLayout()
