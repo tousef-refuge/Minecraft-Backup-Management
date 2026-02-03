@@ -5,6 +5,7 @@ from app.logic import ZipExtractor, get_top_level, get_end_num, remove_end_num
 from pathlib import Path
 
 class StatusDialog(QtWidgets.QDialog):
+    # noinspection PyTypeChecker
     def __init__(self, zip_path, track_numbers):
         super().__init__()
         self.settings = QtCore.QSettings()
@@ -25,7 +26,7 @@ class StatusDialog(QtWidgets.QDialog):
         #giga magic
         self.timer = QtCore.QTimer(self)
         self.timer.timeout.connect(self.start_extract)
-        self.timer.start(1000) #add configurer later
+        self.timer.start(int(self.settings.value("refresh_time", 1000)))
 
         self.thread = None
         self.extractor = None

@@ -1,5 +1,6 @@
 from PySide6 import QtCore, QtWidgets
 
+from app.windows.window_build import info_layout
 from app.logic import find_zip
 from .status import StatusDialog
 from .config import ConfigDialog
@@ -78,14 +79,7 @@ class Dialog(QtWidgets.QDialog):
                 "No backup with this world name has been found.\nKeep in mind the name of the folder inside the backup\nis checked, not the zip itself."
             )
 
-    def _on_config(self):
+    @staticmethod
+    def _on_config():
         config_dialog = ConfigDialog()
         config_dialog.exec()
-
-def info_layout(widget, text):
-    sublayout = QtWidgets.QHBoxLayout()
-    info = QtWidgets.QLabel('ⓘ')
-    info.setToolTip(text)
-    sublayout.addWidget(widget, alignment=QtCore.Qt.AlignmentFlag.AlignRight)
-    sublayout.addWidget(info, alignment=QtCore.Qt.AlignmentFlag.AlignLeft)
-    return sublayout
