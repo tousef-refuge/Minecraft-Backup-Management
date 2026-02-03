@@ -1,11 +1,10 @@
 from PySide6 import QtCore, QtGui, QtWidgets
-from pathlib import Path
-import sys
-import os
-sys.path.append(str(Path(__file__).resolve().parent))
 
 from app.logic import is_valid_mc_dir
-from backup_extract import Dialog as BackupExtractDialog
+from .backup_extract import Dialog as BackupExtractDialog
+
+from pathlib import Path
+import os
 
 class MainWindow(QtWidgets.QWidget):
     def __init__(self):
