@@ -74,7 +74,7 @@ class Dialog(QtWidgets.QDialog):
 
         zip_paths = find_zips(Path(self.settings.value("minecraft_dir")) / "backups", world_name, track_numbers)
         if self.scan_save.isChecked():
-            zip_paths = zip_paths or find_zips(Path(self.settings.value("minecraft_dir")) / "saves",
+            zip_paths += find_zips(Path(self.settings.value("minecraft_dir")) / "saves",
                                             world_name, track_numbers)
 
         if zip_paths:
