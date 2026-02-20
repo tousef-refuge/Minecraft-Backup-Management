@@ -1,7 +1,7 @@
 from PySide6 import QtCore, QtWidgets
 
 from app.windows.window_build import info_layout
-from app.logic import find_zip
+from app.logic import find_zips
 from .status import StatusDialog
 from .config import ConfigDialog
 
@@ -72,13 +72,13 @@ class Dialog(QtWidgets.QDialog):
         track_numbers = self.track_numbers.isChecked()
         play_sound = self.play_sound.isChecked()
 
-        zip_path = find_zip(Path(self.settings.value("minecraft_dir")) / "backups", world_name, track_numbers)
+        zip_paths = find_zips(Path(self.settings.value("minecraft_dir")) / "backups", world_name, track_numbers)
         if self.scan_save.isChecked():
-            zip_path = zip_path or find_zip(Path(self.settings.value("minecraft_dir")) / "saves",
+            zip_paths = zip_paths or find_zips(Path(self.settings.value("minecraft_dir")) / "saves",
                                             world_name, track_numbers)
 
-        if zip_path:
-            status_dialog = StatusDialog(zip_path, track_numbers, play_sound)
+        if zip_paths:
+            status_dialog = StatusDialog(zip_paths[0], track_numbers, play_sound)
             status_dialog.exec()
         else:
             QtWidgets.QMessageBox.warning(

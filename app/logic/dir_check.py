@@ -19,7 +19,8 @@ def is_valid_world_folder(zip_path, folder):
     except zipfile.BadZipFile:
         return False
 
-def find_zip(zip_dir, world_name, track_numbers):
+def find_zips(zip_dir, world_name, track_numbers):
+    zips = []
     for zip_path in zip_dir.glob("*.zip"):
         try:
             world_dir ,= get_top_level(zip_path)
@@ -27,11 +28,11 @@ def find_zip(zip_dir, world_name, track_numbers):
                 world_dir = remove_end_num(world_dir)
 
             if is_valid_world_folder(zip_path, world_dir) and world_dir == world_name:
-                return zip_path
+                zips.append(zip_path)
 
         except ValueError:
             continue
-    return None
+    return zips
 
 def get_top_level(zip_path):
     top_level = set()
