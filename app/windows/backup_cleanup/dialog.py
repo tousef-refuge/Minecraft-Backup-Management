@@ -2,6 +2,7 @@ from PySide6 import QtCore, QtWidgets
 
 from app.windows.window_build import info_layout
 from app.logic import find_zips
+from .status import StatusDialog
 from .config import ConfigDialog
 
 from pathlib import Path
@@ -69,7 +70,8 @@ class Dialog(QtWidgets.QDialog):
                                    world_name, track_numbers)
 
         if zip_paths:
-            pass
+            status_dialog = StatusDialog(zip_paths, track_numbers)
+            status_dialog.exec()
         else:
             QtWidgets.QMessageBox.warning(
                 self,
