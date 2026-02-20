@@ -43,7 +43,8 @@ class StatusDialog(QtWidgets.QDialog):
             ''
         ))
         #if its zero we change that
-        if not self.world_num:
+        #it also needs to actually track numbers
+        if (not self.world_num) and self.track_numbers:
             self.world_num = get_end_num(world_name)
 
         if not self.track_numbers:
@@ -90,7 +91,7 @@ class StatusDialog(QtWidgets.QDialog):
 
     def _status_connect(self, message):
         self.status_label.setText(message)
-        if message == "Extracting...":
+        if message == "Extracting..." and self.track_numbers:
             self.world_num += 1
 
     #camelcase jumpscare
