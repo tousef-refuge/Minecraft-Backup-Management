@@ -1,6 +1,6 @@
 [project]
 name = "minecraftbackupmanagement"
-version = "0.1.0"
+version = "0.3.0"
 description = "App that manages Minecraft saves and backups"
 authors = [
     {name = "tousef-refuge"}
