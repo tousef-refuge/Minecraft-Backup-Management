@@ -20,3 +20,7 @@ CANCER
 
 - (v 0.1.0) Initial release
 - (v 0.2.0) Backup extraction can now be configured
+- (v 0.3.0) Added a sound effect that plays when you extract 
+a backup to make sure you don't accidentally open the world 
+while still extracting from it. Also fixed a minor bug with
+world number tracking
