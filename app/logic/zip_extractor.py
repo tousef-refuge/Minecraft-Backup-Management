@@ -1,6 +1,7 @@
-from PySide6 import QtCore
+from PySide6 import QtCore, QtMultimedia
 
 from app.logic import remove_end_num, get_top_level
+from app import PROJECT_DIR
 
 from pathlib import Path
 import zipfile
@@ -17,6 +18,11 @@ class ZipExtractor(QtCore.QObject):
         self.world_num = world_num
         self.extract_dir = Path(self.settings.value("minecraft_dir")) / "saves"
         self._running = True
+
+        sound_path = str(PROJECT_DIR / "audio" / "confirm.wav")
+        self.confirm_sound = QtMultimedia.QSoundEffect()
+        self.confirm_sound.setSource(QtCore.QUrl.fromLocalFile(sound_path))
+        self.confirm_sound.setVolume(0.5)
 
     def run(self):
         if not self.zip_path.exists():
@@ -44,6 +50,7 @@ class ZipExtractor(QtCore.QObject):
                 base_name = remove_end_num(new_dir.name)
                 new_name = new_dir.with_name(f"{base_name}#{self.world_num}")
                 new_dir.rename(new_name)
+            self.confirm_sound.play()
 
         self.status.emit("Up to date")
         self.finished.emit()
