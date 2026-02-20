@@ -10,6 +10,7 @@ class ZipExtractor(QtCore.QObject):
     status = QtCore.Signal(str)
     finished = QtCore.Signal()
 
+    # noinspection PyTypeChecker
     def __init__(self, zip_path, world_num, play_sound):
         super().__init__()
         self.settings = QtCore.QSettings()
@@ -24,7 +25,7 @@ class ZipExtractor(QtCore.QObject):
             sound_path = str(PROJECT_DIR / "audio" / "confirm.wav")
             self.confirm_sound = QtMultimedia.QSoundEffect()
             self.confirm_sound.setSource(QtCore.QUrl.fromLocalFile(sound_path))
-            self.confirm_sound.setVolume(0.5)
+            self.confirm_sound.setVolume(int(self.settings.value("sound_volume", 50)) / 100)
 
     def run(self):
         if not self.zip_path.exists():

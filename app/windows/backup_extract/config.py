@@ -34,6 +34,15 @@ class ConfigDialog(QtWidgets.QDialog):
             info_layout(self.refresh_time, "The amount of time between each extraction attempt\nin milliseconds. 1 second is recommended")
         )
 
+        self.sound_volume = QtWidgets.QSpinBox()
+        self.sound_volume.setMinimum(1)
+        self.sound_volume.setMaximum(100)
+        self.sound_volume.setValue(int(self.settings.value("sound_volume", 50)))
+        frame_layout.addRow(
+            "Sound Volume:",
+            info_layout(self.sound_volume, "The volume of the sound that plays when a backup\nis extracted (if sound has been enabled)")
+        )
+
         self.main_layout.addWidget(frame)
 
     def _build_buttons(self):
@@ -48,4 +57,5 @@ class ConfigDialog(QtWidgets.QDialog):
 
     def _on_confirm(self):
         self.settings.setValue("refresh_time", self.refresh_time.value())
+        self.settings.setValue("sound_volume", self.sound_volume.value())
         self.close()
