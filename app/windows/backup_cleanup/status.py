@@ -1,7 +1,6 @@
 from PySide6 import QtCore, QtWidgets
 
 class StatusDialog(QtWidgets.QDialog):
-    # noinspection PyTypeChecker
     def __init__(self, zip_paths, track_numbers):
         super().__init__()
         self.settings = QtCore.QSettings()
@@ -15,6 +14,7 @@ class StatusDialog(QtWidgets.QDialog):
         self.main_layout.setSpacing(10)
 
         self._build_labels()
+        self._run()
 
         self.adjustSize()
         self.setFixedSize(self.size())
@@ -31,3 +31,13 @@ class StatusDialog(QtWidgets.QDialog):
 
         self.main_layout.addWidget(info_label)
         self.main_layout.addWidget(frame)
+
+    #genuinely praying to allah i didnt delete a super important backup here lmao
+    # noinspection PyTypeChecker
+    def _run(self):
+        sorted(self.zip_paths)
+        for idx, zip_path in enumerate(self.zip_paths):
+            if idx >= int(self.settings.value("backup_count", 1)):
+                zip_path.unlink()
+
+        self.status_label.setText("Finished cleanup")

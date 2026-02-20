@@ -48,4 +48,5 @@ class ConfigDialog(QtWidgets.QDialog):
         self.main_layout.addLayout(button_layout)
 
     def _on_confirm(self):
+        self.settings.setValue("backup_count", self.backup_count.value())
         self.close()
