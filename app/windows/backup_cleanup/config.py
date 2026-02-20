@@ -2,6 +2,11 @@ from PySide6 import QtCore, QtWidgets
 
 from app.windows.window_build import info_layout
 
+sort_method_dict = {
+    "newest": lambda p: -p.stat().st_mtime,
+    "oldest": lambda p: p.stat().st_mtime
+}
+
 class ConfigDialog(QtWidgets.QDialog):
     def __init__(self):
         super().__init__()
@@ -35,6 +40,16 @@ class ConfigDialog(QtWidgets.QDialog):
                         "The number of backups that will remain after the\ncleanup is complete")
         )
 
+        sort_methods = sort_method_dict.keys()
+        self.sort_method = QtWidgets.QComboBox()
+        self.sort_method.addItems(sort_methods)
+        self.sort_method.setCurrentText(self.settings.value("sort_method", "newest"))
+        frame_layout.addRow(
+            "Sorting Method:",
+            info_layout(self.sort_method,
+                        "The sorting method that will decide what backups get deleted\nFor example, setting the sorting method to 'newest' keeps the newest\nbackups and discards the rest")
+        )
+
         self.main_layout.addWidget(frame)
 
     def _build_buttons(self):
@@ -49,4 +64,5 @@ class ConfigDialog(QtWidgets.QDialog):
 
     def _on_confirm(self):
         self.settings.setValue("backup_count", self.backup_count.value())
+        self.settings.setValue("sort_method", self.sort_method.currentText())
         self.close()
