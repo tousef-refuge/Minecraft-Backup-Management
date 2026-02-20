@@ -44,6 +44,13 @@ class Dialog(QtWidgets.QDialog):
             info_layout(self.scan_save, "On top of the backups/ folder, the saves/ folder will\nadditionally be scanned\nThe program will use the first correct .zip file it detects\nstarting with backups/ and then moving to saves/")
         )
 
+        self.play_sound = QtWidgets.QCheckBox()
+        self.play_sound.setChecked(True)
+        frame_layout.addRow(
+            "Play Sound:",
+            info_layout(self.play_sound, "Play a sound when a backup finishes extracting. It's recommended\nto keep this turned on to not break the program accidentally")
+        )
+
         self.main_layout.addWidget(frame)
 
     def _build_buttons(self):
@@ -63,6 +70,7 @@ class Dialog(QtWidgets.QDialog):
     def _on_run(self):
         world_name = self.world_name.text().strip()
         track_numbers = self.track_numbers.isChecked()
+        play_sound = self.play_sound.isChecked()
 
         zip_path = find_zip(Path(self.settings.value("minecraft_dir")) / "backups", world_name, track_numbers)
         if self.scan_save.isChecked():
@@ -70,7 +78,7 @@ class Dialog(QtWidgets.QDialog):
                                             world_name, track_numbers)
 
         if zip_path:
-            status_dialog = StatusDialog(zip_path, track_numbers)
+            status_dialog = StatusDialog(zip_path, track_numbers, play_sound)
             status_dialog.exec()
         else:
             QtWidgets.QMessageBox.warning(

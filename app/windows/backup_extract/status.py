@@ -6,11 +6,12 @@ from pathlib import Path
 
 class StatusDialog(QtWidgets.QDialog):
     # noinspection PyTypeChecker
-    def __init__(self, zip_path, track_numbers):
+    def __init__(self, zip_path, track_numbers, play_sound):
         super().__init__()
         self.settings = QtCore.QSettings()
         self.zip_path = zip_path
         self.track_numbers = track_numbers
+        self.play_sound = play_sound
         self.setWindowTitle("Success")
 
         self.main_layout = QtWidgets.QVBoxLayout(self)
@@ -71,7 +72,7 @@ class StatusDialog(QtWidgets.QDialog):
         self.is_extracting = True
 
         self.thread = QtCore.QThread()
-        self.extractor = ZipExtractor(self.zip_path, self.world_num)
+        self.extractor = ZipExtractor(self.zip_path, self.world_num, self.play_sound)
         self.extractor.moveToThread(self.thread)
 
         self.thread.started.connect(self.extractor.run)

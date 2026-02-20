@@ -10,7 +10,7 @@ class ZipExtractor(QtCore.QObject):
     status = QtCore.Signal(str)
     finished = QtCore.Signal()
 
-    def __init__(self, zip_path, world_num):
+    def __init__(self, zip_path, world_num, play_sound):
         super().__init__()
         self.settings = QtCore.QSettings()
 
@@ -19,10 +19,12 @@ class ZipExtractor(QtCore.QObject):
         self.extract_dir = Path(self.settings.value("minecraft_dir")) / "saves"
         self._running = True
 
-        sound_path = str(PROJECT_DIR / "audio" / "confirm.wav")
-        self.confirm_sound = QtMultimedia.QSoundEffect()
-        self.confirm_sound.setSource(QtCore.QUrl.fromLocalFile(sound_path))
-        self.confirm_sound.setVolume(0.5)
+        self.confirm_sound = None
+        if play_sound:
+            sound_path = str(PROJECT_DIR / "audio" / "confirm.wav")
+            self.confirm_sound = QtMultimedia.QSoundEffect()
+            self.confirm_sound.setSource(QtCore.QUrl.fromLocalFile(sound_path))
+            self.confirm_sound.setVolume(0.5)
 
     def run(self):
         if not self.zip_path.exists():
@@ -50,7 +52,8 @@ class ZipExtractor(QtCore.QObject):
                 base_name = remove_end_num(new_dir.name)
                 new_name = new_dir.with_name(f"{base_name}#{self.world_num}")
                 new_dir.rename(new_name)
-            self.confirm_sound.play()
+            if self.confirm_sound:
+                self.confirm_sound.play()
 
         self.status.emit("Up to date")
         self.finished.emit()
