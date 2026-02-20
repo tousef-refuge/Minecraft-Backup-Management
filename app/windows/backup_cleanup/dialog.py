@@ -1,6 +1,10 @@
 from PySide6 import QtCore, QtWidgets
 
 from app.windows.window_build import info_layout
+from app.logic import find_zips
+from .config import ConfigDialog
+
+from pathlib import Path
 
 class Dialog(QtWidgets.QDialog):
     def __init__(self):
@@ -56,7 +60,24 @@ class Dialog(QtWidgets.QDialog):
         self.main_layout.addLayout(button_layout)
 
     def _on_run(self):
-        pass
+        world_name = self.world_name.text().strip()
+        track_numbers = self.track_numbers.isChecked()
 
-    def _on_config(self):
-        pass
+        zip_paths = find_zips(Path(self.settings.value("minecraft_dir")) / "backups", world_name, track_numbers)
+        if self.scan_save.isChecked():
+            zip_paths += find_zips(Path(self.settings.value("minecraft_dir")) / "saves",
+                                   world_name, track_numbers)
+
+        if zip_paths:
+            pass
+        else:
+            QtWidgets.QMessageBox.warning(
+                self,
+                "Error",
+                "No backup with this world name has been found.\nKeep in mind the name of the folder inside the backup\nis checked, not the zip itself."
+            )
+
+    @staticmethod
+    def _on_config():
+        config_dialog = ConfigDialog()
+        config_dialog.exec()
