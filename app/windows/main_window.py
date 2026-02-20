@@ -1,6 +1,7 @@
 from PySide6 import QtCore, QtGui, QtWidgets
 
 from app.logic import is_valid_mc_dir
+from .backup_cleanup import Dialog as BackupCleanupDialog
 from .backup_extract import Dialog as BackupExtractDialog
 
 from pathlib import Path
@@ -87,11 +88,16 @@ class MainWindow(QtWidgets.QWidget):
         self.main_layout.addWidget(frame)
 
     def _build_buttons(self):
-        layout = QtWidgets.QHBoxLayout()
+        layout = QtWidgets.QVBoxLayout()
+        layout.setSpacing(2)
 
         backup_extract_button = QtWidgets.QPushButton("Set up backup auto-extract")
         backup_extract_button.clicked.connect(self._on_backup_extract)
         layout.addWidget(backup_extract_button)
+
+        backup_cleanup_button = QtWidgets.QPushButton("Clean up backups folder")
+        backup_cleanup_button.clicked.connect(self._on_backup_cleanup)
+        layout.addWidget(backup_cleanup_button)
 
         self.main_layout.addLayout(layout)
 
@@ -117,13 +123,19 @@ class MainWindow(QtWidgets.QWidget):
                     "Invalid .minecraft folder."
                 )
 
-    def _on_backup_extract(self):
+    def _open_dialog(self, dialog_class):
         if self.settings.value("minecraft_dir"):
-            backup_extract_dialog = BackupExtractDialog()
-            backup_extract_dialog.exec()
+            dialog = dialog_class()
+            dialog.exec()
         else:
             QtWidgets.QMessageBox.warning(
                 self,
                 "Error",
                 "Invalid .minecraft folder."
             )
+
+    def _on_backup_extract(self):
+        self._open_dialog(BackupExtractDialog)
+
+    def _on_backup_cleanup(self):
+        self._open_dialog(BackupCleanupDialog)
