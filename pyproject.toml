@@ -1,6 +1,6 @@
 [project]
 name = "app"
-version = "1.0.0"
+version = "1.1.0"
 description = "App that manages Minecraft saves and backups"
 authors = [
     {name = "tousef-refuge"}
@@ -8,7 +8,8 @@ authors = [
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    "pyside6 (>=6.10.2,<7.0.0)"
+    "pyside6 (>=6.10.2,<7.0.0)",
+    "send2trash (>=2.1.0)"
 ]
 
 [build-system]
