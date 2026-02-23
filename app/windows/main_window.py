@@ -3,6 +3,7 @@ from PySide6 import QtCore, QtGui, QtWidgets
 from app.logic import is_valid_mc_dir
 from .backup_cleanup import Dialog as BackupCleanupDialog
 from .backup_extract import Dialog as BackupExtractDialog
+from .clear_history import Dialog as ClearHistoryDialog
 
 from pathlib import Path
 import os
@@ -91,6 +92,10 @@ class MainWindow(QtWidgets.QWidget):
         layout = QtWidgets.QVBoxLayout()
         layout.setSpacing(2)
 
+        clear_history_button = QtWidgets.QPushButton("Clear world history")
+        clear_history_button.clicked.connect(self._on_clear_history)
+        layout.addWidget(clear_history_button)
+
         backup_extract_button = QtWidgets.QPushButton("Set up backup auto-extract")
         backup_extract_button.clicked.connect(self._on_backup_extract)
         layout.addWidget(backup_extract_button)
@@ -133,6 +138,10 @@ class MainWindow(QtWidgets.QWidget):
                 "Error",
                 "Invalid .minecraft folder."
             )
+
+    @staticmethod
+    def _on_clear_history():
+        ClearHistoryDialog()
 
     def _on_backup_extract(self):
         self._open_dialog(BackupExtractDialog)

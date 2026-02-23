@@ -13,3 +13,8 @@ def remove_world(world):
     history = SettingsList("world_history")
     if world in history:
         history.remove(world)
+
+def clear_history():
+    history = SettingsList("world_history")
+    while len(history) > 0:
+        history.remove(history[0])
