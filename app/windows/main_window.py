@@ -92,6 +92,10 @@ class MainWindow(QtWidgets.QWidget):
         layout = QtWidgets.QVBoxLayout()
         layout.setSpacing(2)
 
+        open_minecraft_button = QtWidgets.QPushButton("Open Minecraft directory")
+        open_minecraft_button.clicked.connect(self._on_open_minecraft)
+        layout.addWidget(open_minecraft_button)
+
         clear_history_button = QtWidgets.QPushButton("Clear world history")
         clear_history_button.clicked.connect(self._on_clear_history)
         layout.addWidget(clear_history_button)
@@ -129,9 +133,21 @@ class MainWindow(QtWidgets.QWidget):
                 )
 
     def _open_dialog(self, dialog_class):
-        if self.settings.value("minecraft_dir"):
+        mc_dir = self.settings.value("minecraft_dir")
+        if mc_dir:
             dialog = dialog_class()
             dialog.exec()
+        else:
+            QtWidgets.QMessageBox.warning(
+                self,
+                "Error",
+                "Invalid .minecraft folder."
+            )
+
+    def _on_open_minecraft(self):
+        mc_dir = self.settings.value("minecraft_dir")
+        if mc_dir:
+            os.startfile(mc_dir)
         else:
             QtWidgets.QMessageBox.warning(
                 self,
