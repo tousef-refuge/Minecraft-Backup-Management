@@ -58,3 +58,6 @@ If something doesn't work on other OS, well my bad lmao
 
 - (v 1.0.0) Added backup folder cleanup and a proper
   installment guide
+- (v 1.1.0) Added world history, a way to open .minecraft
+  and a toggle for backup cleanup to not permanently 
+  delete backups
