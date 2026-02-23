@@ -1,12 +1,16 @@
 from PySide6 import QtCore, QtWidgets
 from .config import sort_method_dict
 
+import send2trash
+import os
+
 class StatusDialog(QtWidgets.QDialog):
-    def __init__(self, zip_paths, track_numbers):
+    def __init__(self, zip_paths, track_numbers, perma_delete):
         super().__init__()
         self.settings = QtCore.QSettings()
         self.zip_paths = zip_paths
         self.track_numbers = track_numbers
+        self.perma_delete = perma_delete
         self.setWindowTitle("Success")
 
         self.main_layout = QtWidgets.QVBoxLayout(self)
@@ -41,6 +45,10 @@ class StatusDialog(QtWidgets.QDialog):
 
         for idx, zip_path in enumerate(self.zip_paths):
             if idx >= int(self.settings.value("backup_count", 1)):
-                zip_path.unlink()
+                if self.perma_delete:
+                    zip_path.unlink()
+                else:
+                    norm_path = os.path.normpath(zip_path)
+                    send2trash.send2trash(norm_path)
 
         self.status_label.setText("Finished cleanup")

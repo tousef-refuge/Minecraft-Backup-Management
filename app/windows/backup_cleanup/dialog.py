@@ -44,6 +44,12 @@ class Dialog(QtWidgets.QDialog):
             info_layout(self.scan_save, "On top of the backups/ folder, the saves/ folder will\nadditionally be scanned")
         )
 
+        self.perma_delete = QtWidgets.QCheckBox()
+        frame_layout.addRow(
+            "Permanent Delete:",
+            info_layout(self.perma_delete, "If toggled, permanently deletes backups instead of sending\nthem to the recycling bin.")
+        )
+
         self.main_layout.addWidget(frame)
 
     def _build_buttons(self):
@@ -63,6 +69,7 @@ class Dialog(QtWidgets.QDialog):
     def _on_run(self):
         world_name = self.world_name.currentText().strip()
         track_numbers = self.track_numbers.isChecked()
+        perma_delete = self.perma_delete.isChecked()
 
         zip_paths = find_zips(Path(self.settings.value("minecraft_dir")) / "backups", world_name, track_numbers)
         if self.scan_save.isChecked():
@@ -71,7 +78,7 @@ class Dialog(QtWidgets.QDialog):
 
         if zip_paths:
             world_history.append_world(world_name)
-            status_dialog = StatusDialog(zip_paths, track_numbers)
+            status_dialog = StatusDialog(zip_paths, track_numbers, perma_delete)
             status_dialog.exec()
         else:
             QtWidgets.QMessageBox.warning(
