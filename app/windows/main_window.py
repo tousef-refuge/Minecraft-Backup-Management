@@ -92,13 +92,9 @@ class MainWindow(QtWidgets.QWidget):
         layout = QtWidgets.QVBoxLayout()
         layout.setSpacing(2)
 
-        open_minecraft_button = QtWidgets.QPushButton("Open Minecraft directory")
+        open_minecraft_button = QtWidgets.QPushButton("Open .minecraft directory")
         open_minecraft_button.clicked.connect(self._on_open_minecraft)
         layout.addWidget(open_minecraft_button)
-
-        clear_history_button = QtWidgets.QPushButton("Clear world history")
-        clear_history_button.clicked.connect(self._on_clear_history)
-        layout.addWidget(clear_history_button)
 
         backup_extract_button = QtWidgets.QPushButton("Set up backup auto-extract")
         backup_extract_button.clicked.connect(self._on_backup_extract)
@@ -107,6 +103,10 @@ class MainWindow(QtWidgets.QWidget):
         backup_cleanup_button = QtWidgets.QPushButton("Clean up backups folder")
         backup_cleanup_button.clicked.connect(self._on_backup_cleanup)
         layout.addWidget(backup_cleanup_button)
+
+        clear_history_button = QtWidgets.QPushButton("Clear world history")
+        clear_history_button.clicked.connect(self._on_clear_history)
+        layout.addWidget(clear_history_button)
 
         self.main_layout.addLayout(layout)
 
@@ -155,12 +155,12 @@ class MainWindow(QtWidgets.QWidget):
                 "Invalid .minecraft folder."
             )
 
-    @staticmethod
-    def _on_clear_history():
-        ClearHistoryDialog()
-
     def _on_backup_extract(self):
         self._open_dialog(BackupExtractDialog)
 
     def _on_backup_cleanup(self):
         self._open_dialog(BackupCleanupDialog)
+
+    @staticmethod
+    def _on_clear_history():
+        ClearHistoryDialog()
