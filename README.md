@@ -3,13 +3,15 @@ This is an app to help with management of Minecraft saves
 and backups. Not too many features currently exist so send
 me some ideas or something
 
-# Current features (v 1.0.0)
+# Current features (v 1.1.0)
 - Automatic backup extraction to keep a save constantly
   restored on deletion, useful for speedrunning fixed
   seeds or downloaded maps
 - World number tracker for backup extraction
 - Backup folder cleanup to get rid of redundant backups
   and free up storage
+- A way to open the .minecraft folder directly without
+  needing to do %appdata% black magic
 
 # How to run
 You know what since I figured it out I'll actually be nice
