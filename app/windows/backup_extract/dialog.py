@@ -1,7 +1,7 @@
 from PySide6 import QtCore, QtWidgets
 
-from app.windows.window_build import info_layout
-from app.logic import find_zips
+from app.windows.window_build import info_layout, world_history_widget
+from app.logic import find_zips, world_history
 from .status import StatusDialog
 from .config import ConfigDialog
 
@@ -29,7 +29,7 @@ class Dialog(QtWidgets.QDialog):
         frame_layout = QtWidgets.QFormLayout(frame)
         frame_layout.setSpacing(4)
 
-        self.world_name = QtWidgets.QLineEdit()
+        self.world_name = world_history_widget()
         frame_layout.addRow("World Name:", self.world_name)
 
         self.track_numbers = QtWidgets.QCheckBox()
@@ -68,7 +68,7 @@ class Dialog(QtWidgets.QDialog):
         self.main_layout.addLayout(button_layout)
 
     def _on_run(self):
-        world_name = self.world_name.text().strip()
+        world_name = self.world_name.currentText().strip()
         track_numbers = self.track_numbers.isChecked()
         play_sound = self.play_sound.isChecked()
 
@@ -78,6 +78,7 @@ class Dialog(QtWidgets.QDialog):
                                             world_name, track_numbers)
 
         if zip_paths:
+            world_history.append_world(world_name)
             status_dialog = StatusDialog(zip_paths[0], track_numbers, play_sound)
             status_dialog.exec()
         else:

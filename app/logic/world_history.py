@@ -1,15 +1,15 @@
 from app.settings import SettingsList
 
-def append_path(path):
-    remove_path(path)
+def append_world(world):
+    remove_world(world)
     history = SettingsList("world_history")
-    history.append(path)
+    history.append(world)
 
     if len(history) > 6: #only the 5 most recent worlds are considered
-        remove_path(history[0])
+        remove_world(history[0])
 
-def remove_path(path):
+def remove_world(world):
     #deja vu
     history = SettingsList("world_history")
-    if path in history:
-        history.remove(path)
+    if world in history:
+        history.remove(world)
